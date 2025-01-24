@@ -1,0 +1,1 @@
+"badapple.c" OPTIMIZE (8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\badapple.lst) OBJECT(.\Objects\badapple.obj)

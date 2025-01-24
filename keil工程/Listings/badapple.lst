@@ -1,0 +1,35 @@
+C51 COMPILER V9.60.7.0   BADAPPLE                                                          07/22/2024 14:25:03 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE BADAPPLE
+OBJECT MODULE PLACED IN .\Objects\badapple.obj
+COMPILER INVOKED BY: F:\Keil C51\C51\BIN\C51.EXE badapple.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings
+                    -\badapple.lst) OBJECT(.\Objects\badapple.obj)
+
+line level    source
+
+   1          #include "LCD1602.h"
+   2          
+   3          
+   4          void BadApple_Init(void){
+   5   1              LCD_Init();
+   6   1      }
+   7          
+   8          
+   9          
+  10          
+  11          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =      3    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

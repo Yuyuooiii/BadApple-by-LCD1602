@@ -1,0 +1,88 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              01/23/2025 19:17:15 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: F:\Keil C51\C51\BIN\C51.EXE main.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\main.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <STC89C5xRC.H>
+   2          #include "LCD1602.h"
+   3          #include "UART.h"
+   4          
+   5          // 帧缓冲区
+   6          unsigned char frame_buffer_1[8][8];
+   7          unsigned char frame_buffer_2[8][8];
+   8          
+   9          // 帧状态变量
+  10          unsigned char frame_ready_flag = 0;    
+  11          unsigned char (*active_buffer)[8] = frame_buffer_1;  // 当前接收缓冲区
+  12          
+  13          /**
+  14           * 切换缓冲区并更新显示
+  15           */
+  16          void handle_frame_complete(void) {      
+  17   1          if (active_buffer == frame_buffer_1) {
+  18   2              LCD_WriteCGRAM(frame_buffer_1); // 写入CGRAM
+  19   2              active_buffer = frame_buffer_2; // 切换至另一个缓冲区
+  20   2          } else {
+  21   2              LCD_WriteCGRAM(frame_buffer_2);
+  22   2              active_buffer = frame_buffer_1;
+  23   2          }
+  24   1          LCD_ShowFrame(); // 更新LCD显示
+  25   1      }
+  26          
+  27          void main(void) {
+  28   1          LCD_Init();    
+  29   1          UART_Init();    
+  30   1              LCD_ShowString(1,7,"BadApple!!");
+  31   1              LCD_ShowString(2,7,"By suyu");
+  32   1          while (1) {
+  33   2              // 主循环可扩展其他逻辑
+  34   2           
+  35   2          }
+  36   1      }
+  37          
+  38          /**
+  39           * UART接收中断
+  40           */
+  41          void UART_Receive_ISR(void) interrupt 4 { 
+  42   1          static unsigned char received_byte_count = 0; // 接收字节计数
+  43   1          unsigned char received_byte;
+  44   1      
+  45   1          if (RI) {  
+  46   2              RI = 0;
+  47   2              received_byte = SBUF; 
+  48   2      
+  49   2              if (received_byte == 0xFF) { // 起始位
+  50   3                  received_byte_count = 0; 
+  51   3                  frame_ready_flag = 0;    
+  52   3              } else if (received_byte == 0xFE) { // 结束位
+  53   3                  if (received_byte_count == 64) { // 判断是否接收满一帧
+  54   4                      frame_ready_flag = 1; 
+C51 COMPILER V9.60.7.0   MAIN                                                              01/23/2025 19:17:15 PAGE 2   
+
+  55   4                                handle_frame_complete(); // 切换缓冲区并更新显示
+  56   4                  }
+  57   3              } else { // 接收普通数据字节
+  58   3                  active_buffer[received_byte_count / 8][received_byte_count % 8] = received_byte;
+  59   3                  received_byte_count++; 
+  60   3              }
+  61   2          }  
+  62   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    277    ----
+   CONSTANT SIZE    =     19    ----
+   XDATA SIZE       =    133       1
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
